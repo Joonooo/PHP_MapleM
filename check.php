@@ -7,8 +7,48 @@
 	<title>캐릭터 조회</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<style>
+		.fade-in {
+			animation: fadeIn 0.5s;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
 		.result-container {
 			display: none;
+			margin-top: 20px;
+		}
+
+		.result-card {
+			background-color: #f8f9fa;
+			border: 1px solid #e9ecef;
+			border-radius: 5px;
+			padding: 20px;
+		}
+
+		.card-title {
+			color: #007bff;
+			margin-bottom: 15px;
+		}
+
+		.card-body>div {
+			margin-bottom: 10px;
+			line-height: 1.5;
+		}
+
+		.card-body>div:last-child {
+			margin-bottom: 0;
+		}
+
+		.card-body strong {
+			color: #495057;
 		}
 	</style>
 </head>
@@ -35,32 +75,62 @@
 			</div>
 			<button type="button" class="btn btn-primary" onclick="submitCharacterForm()">조회</button>
 		</form>
-		<div id="result" class="result-container mt-3"></div>
+		<div id="result" class="result-container mt-3" style="display: block;"></div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
+		// 시간 형식 변환 함수
+		function formatDateTime(dateTimeStr) {
+			const date = new Date(dateTimeStr);
+			return date.toLocaleString(); // 'ko-KR' 로케일을 사용할 경우 한국어 형식으로 변환
+		}
+
+		// 성별 변환 함수
+		function formatGender(genderStr) {
+			return genderStr === 'Male' ? '남성' : '여성';
+		}
+
 		function submitCharacterForm() {
 			var characterName = document.getElementById('characterName').value;
 			var worldName = document.getElementById('worldName').value;
-
-			// 결과 컨테이너와 로딩 스피너 표시
 			var resultContainer = document.getElementById('result');
-			resultContainer.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div>';
+			resultContainer.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">캐릭터 정보를 불러오는 중...</p></div>';
 			resultContainer.style.display = 'block';
 
 			// 서버 측 PHP 스크립트로 요청
 			fetch(`./fetchCharacterId.php?character_name=${characterName}&world_name=${worldName}`)
 				.then(response => response.json())
 				.then(data => {
-					// 성공적으로 데이터를 받아오면 결과를 표시합니다.
-					resultContainer.innerHTML = `<strong>OCID:</strong> ${data.ocid}`;
-					console.log(data);
+					// 서버 측 PHP 스크립트로 요청
+					fetch(`./fetchCharacterBasic.php?ocid=${data.ocid}`)
+						.then(response => response.json())
+						.then(data => {
+							const infoHtml = `
+								<div class="result-card fade-in">
+									<h5 class="card-title">캐릭터 정보</h5>
+									<div class="card-body">
+										<div><strong>캐릭터 명:</strong> ${data.character_name}</div>
+										<div><strong>월드 명:</strong> ${data.world_name}</div>
+										<div><strong>캐릭터 생성일:</strong> ${formatDateTime(data.character_date_create)}</div>
+										<div><strong>마지막 로그인:</strong> ${formatDateTime(data.character_date_last_login)}</div>
+										<div><strong>마지막 로그아웃:</strong> ${formatDateTime(data.character_date_last_logout)}</div>
+										<div><strong>직업:</strong> ${data.character_job_name}</div>
+										<div><strong>성별:</strong> ${formatGender(data.character_gender)}</div>
+										<div><strong>경험치:</strong> ${data.character_exp.toLocaleString()}</div>
+										<div><strong>레벨:</strong> ${data.character_level}</div>
+									</div>
+								</div>
+							`;
+							resultContainer.innerHTML = infoHtml;
+						})
+						.catch(error => {
+							resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다: ${error}</div>`;
+						});
 				})
 				.catch(error => {
-					// 에러 처리
-					resultContainer.innerHTML = `오류가 발생했습니다: ${error}`;
+					resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다: ${error}</div>`;
 				});
 		}
 	</script>
