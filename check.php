@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>캐릭터 조회</title>
+	<title>캐릭터 정보 조회</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		.fade-in {
@@ -31,6 +31,21 @@
 			border: 1px solid #e9ecef;
 			border-radius: 5px;
 			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.item-group {
+			margin-bottom: 20px;
+		}
+
+		.item-name {
+			font-weight: bold;
+			color: #495057;
+		}
+
+		.item-detail {
+			margin-left: 20px;
+			color: #6c757d;
 		}
 
 		.card-title {
@@ -55,7 +70,7 @@
 
 <body>
 	<div class="container mt-5">
-		<h2 class="mb-4">캐릭터 조회</h2>
+		<h2 class="mb-4">캐릭터 정보 조회</h2>
 		<form id="characterForm">
 			<div class="mb-3">
 				<label for="characterName" class="form-label">캐릭터 명</label>
@@ -76,6 +91,7 @@
 			<button type="button" class="btn btn-primary" onclick="submitCharacterForm()">조회</button>
 		</form>
 		<div id="result" class="result-container mt-3" style="display: block;"></div>
+		<div id="result2" class="result-container mt-3" style="display: block;"></div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -95,16 +111,21 @@
 		function submitCharacterForm() {
 			var characterName = document.getElementById('characterName').value;
 			var worldName = document.getElementById('worldName').value;
+
+			var ocid = "";
+
 			var resultContainer = document.getElementById('result');
+			var resultContainer2 = document.getElementById('result2');
 			resultContainer.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">캐릭터 정보를 불러오는 중...</p></div>';
-			resultContainer.style.display = 'block';
+			resultContainer2.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">장착 아이템 정보를 불러오는 중...</p></div>';
 
 			// 서버 측 PHP 스크립트로 요청
 			fetch(`./fetchCharacterId.php?character_name=${characterName}&world_name=${worldName}`)
 				.then(response => response.json())
 				.then(data => {
 					// 서버 측 PHP 스크립트로 요청
-					fetch(`./fetchCharacterBasic.php?ocid=${data.ocid}`)
+					ocid = data.ocid;
+					fetch(`./fetchCharacterBasic.php?ocid=${ocid}`)
 						.then(response => response.json())
 						.then(data => {
 							const infoHtml = `
@@ -124,13 +145,34 @@
 								</div>
 							`;
 							resultContainer.innerHTML = infoHtml;
+
+							// 서버 측 PHP 스크립트로 요청
+							fetch(`./fetchCharacterItem.php?ocid=${ocid}`)
+								.then(response => response.json())
+								.then(datas => {
+									datas = datas['item_equipment'];
+									infoHtml2 = `<div class="result-card fade-in"><h5 class="card-title">장착 아이템 정보</h5><div class="card-body">`;
+									for (let data of datas) {
+										infoHtml2 += `
+											<div class="item-group">
+												<div class="item-name">${data.item_name}</div>
+												<div class="item-detail">${data.item_equipment_slot_name}</div>
+											</div>
+										`
+									}
+									infoHtml2 += `</div></div>`
+									resultContainer2.innerHTML = infoHtml2;
+								})
+								.catch(error => {
+									resultContainer2.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다 ${error}</div>`;
+								});
 						})
 						.catch(error => {
-							resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다: ${error}</div>`;
+							resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다</div>`;
 						});
 				})
 				.catch(error => {
-					resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다: ${error}</div>`;
+					resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다</div>`;
 				});
 		}
 	</script>
