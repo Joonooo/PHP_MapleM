@@ -92,6 +92,8 @@
 		</form>
 		<div id="result" class="result-container mt-3" style="display: block;"></div>
 		<div id="result2" class="result-container mt-3" style="display: block;"></div>
+		<div id="result3" class="result-container mt-3" style="display: block;"></div>
+		<div id="result4" class="result-container mt-3" style="display: block;"></div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -100,7 +102,7 @@
 		// 시간 형식 변환 함수
 		function formatDateTime(dateTimeStr) {
 			const date = new Date(dateTimeStr);
-			return date.toLocaleString(); // 'ko-KR' 로케일을 사용할 경우 한국어 형식으로 변환
+			return date.toLocaleString();
 		}
 
 		// 성별 변환 함수
@@ -108,6 +110,17 @@
 			return genderStr === 'Male' ? '남성' : '여성';
 		}
 
+		function fecthAndinnerHTML(fileName, infoHtml, resultContainer) {
+			fetch(`./${fileName}?ocid=${ocid}`)
+				.then(response => response.json())
+				.then(datas => {
+					resultContainer.innerHTML = infoHtml;
+				})
+				.catch(error => {
+					resultContainer.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다 ${error}</div>`;
+				});
+		}
+		
 		function submitCharacterForm() {
 			var characterName = document.getElementById('characterName').value;
 			var worldName = document.getElementById('worldName').value;
@@ -116,8 +129,12 @@
 
 			var resultContainer = document.getElementById('result');
 			var resultContainer2 = document.getElementById('result2');
+			var resultContainer3 = document.getElementById('result3');
+			var resultContainer4 = document.getElementById('result4');
 			resultContainer.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">캐릭터 정보를 불러오는 중...</p></div>';
 			resultContainer2.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">장착 아이템 정보를 불러오는 중...</p></div>';
+			resultContainer3.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">스탯 정보를 불러오는 중...</p></div>';
+			resultContainer4.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">로딩 중...</span></div><p class="mt-2">길드 정보를 불러오는 중...</p></div>';
 
 			// 서버 측 PHP 스크립트로 요청
 			fetch(`./fetchCharacterId.php?character_name=${characterName}&world_name=${worldName}`)
@@ -162,6 +179,46 @@
 									}
 									infoHtml2 += `</div></div>`
 									resultContainer2.innerHTML = infoHtml2;
+
+									// 서버 측 PHP 스크립트로 요청
+									fetch(`./fetchCharacterStat.php?ocid=${ocid}`)
+										.then(response => response.json())
+										.then(datas => {
+											datas = datas['stat'];
+											infoHtml3 = `<div class="result-card fade-in"><h5 class="card-title">스탯 정보</h5><div class="card-body">`;
+											for (let data of datas) {
+												infoHtml3 += `
+											<div class="item-group">
+												<div class="item-name">${data.stat_name}</div>
+												<div class="item-detail">${data.stat_value}</div>
+											</div>
+										`
+											}
+											infoHtml3 += `</div></div>`
+											resultContainer3.innerHTML = infoHtml3;
+
+											// 서버 측 PHP 스크립트로 요청
+											fetch(`./fetchCharacterGuild.php?ocid=${ocid}`)
+												.then(response => response.json())
+												.then(datas => {
+													guild_name = datas['guild_name'];
+													const infoHtml4 = `
+														<div class="result-card fade-in">
+															<h5 class="card-title">길드 이름</h5>
+															<div class="card-body">
+																<div><strong>${guild_name}</strong></div>
+															</div>
+														</div>
+													`;
+													resultContainer4.innerHTML = infoHtml4;
+												})
+												.catch(error => {
+													resultContainer4.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다 ${error}</div>`;
+												});
+										})
+										.catch(error => {
+											resultContainer3.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다 ${error}</div>`;
+										});
 								})
 								.catch(error => {
 									resultContainer2.innerHTML = `<div class="alert alert-danger fade-in" role="alert">오류가 발생했습니다 ${error}</div>`;
