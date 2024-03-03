@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+    <title>메이플스토리M - 유저 정보 조회</title>
+    <link>https://maplem.joonoo.kr</link>
+    <description>메이플스토리M의 유저의 정보(능력치, 아이템, 길드, 스탯)를 조회할 수 있습니다</description>
+    <language>ko-kr</language>
+
+	<item>
+		<title>캐릭터 정보 조회 페이지</title>
+		<link>https://maplem.joonoo.kr/basic.php</link>
+		<description>캐릭터의 기본 정보를 조회합니다. 버프, 아이템 사용 등으로 적용된 효과로 경험치 또는 레벨이 게임 내 데이터와 상이할 수 있습니다.</description>
+		<pubDate>Sun, 03 Mar 2024 09:00:00 GMT</pubDate>
+	</item>
+
+	<item>
+		<title>가입한 길드 이름 조회 페이지</title>
+		<link>https://maplem.joonoo.kr/guild.php</link>
+		<description>캐릭터가 가입한 길드 이름을 조회합니다.</description>
+		<pubDate>Sun, 03 Mar 2024 10:00:00 GMT</pubDate>
+	</item>
+
+	<item>
+		<title>장착 아이템 정보 조회 페이지</title>
+		<link>https://maplem.joonoo.kr/item.php</link>
+		<description>캐릭터가 장착 아이템 정보를 조회합니다.</description>
+		<pubDate>Sun, 03 Mar 2024 11:00:00 GMT</pubDate>
+	</item>
+
+	<item>
+		<title>캐릭터 스탯 정보 조회 페이지</title>
+		<link>https://maplem.joonoo.kr/stat.php</link>
+		<description>캐릭터의 스탯 정보를 조회합니다. 아이템 착용, 강화, 버프 등 캐릭터에 적용된 효과로 스탯 값이 게임 내 데이터와 상이할 수 있습니다.</description>
+		<pubDate>Sun, 03 Mar 2024 12:00:00 GMT</pubDate>
+	</item>
+</channel>
+</rss>
