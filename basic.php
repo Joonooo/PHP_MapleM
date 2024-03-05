@@ -66,6 +66,7 @@
 			color: #495057;
 		}
 	</style>
+	<?php include 'header.php'; ?>
 </head>
 
 <body>
@@ -96,6 +97,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
+		document.getElementById('characterName').addEventListener('keydown', function (event) {
+			if (event.key === 'Enter') {
+				event.preventDefault();
+				submitCharacterForm();
+			}
+		});
+
 		// 시간 형식 변환 함수
 		function formatDateTime(dateTimeStr) {
 			const date = new Date(dateTimeStr);
@@ -164,4 +172,5 @@
 	</script>
 </body>
 <?php include 'footer.php'; ?>
+
 </html>
