@@ -1,0 +1,72 @@
+.fade-in {
+	animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
+	background: linear-gradient(to right, #6a11cb, #2575fc);
+	color: #ffffff;
+}
+
+.result-container {
+	display: none;
+	margin-top: 20px;
+}
+
+.result-card {
+	background-color: #f8f9fa;
+	border: 1px solid #e9ecef;
+	border-radius: 5px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.item-group {
+	margin-bottom: 20px;
+}
+
+.item-name {
+	font-weight: bold;
+	color: #495057;
+}
+
+.item-detail {
+	margin-left: 20px;
+	color: #6c757d;
+}
+
+.card-title {
+	color: #007bff;
+	margin-bottom: 15px;
+}
+
+.card-body > div {
+	margin-bottom: 10px;
+	line-height: 1.5;
+}
+
+.card-body > div:last-child {
+	margin-bottom: 0;
+}
+
+.card-body {
+	color: #495057;
+}
+
+.button-container {
+	display: flex;
+	justify-content: center;
+}

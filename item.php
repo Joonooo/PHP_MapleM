@@ -6,66 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>장착 아이템 정보</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	<style>
-		.fade-in {
-			animation: fadeIn 0.5s;
-		}
-
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
-
-			to {
-				opacity: 1;
-			}
-		}
-
-		.result-container {
-			display: none;
-			margin-top: 20px;
-		}
-
-		.result-card {
-			background-color: #f8f9fa;
-			border: 1px solid #e9ecef;
-			border-radius: 5px;
-			padding: 20px;
-			margin-bottom: 20px;
-		}
-
-		.item-group {
-			margin-bottom: 20px;
-		}
-
-		.item-name {
-			font-weight: bold;
-			color: #495057;
-		}
-
-		.item-detail {
-			margin-left: 20px;
-			color: #6c757d;
-		}
-
-		.card-title {
-			color: #007bff;
-			margin-bottom: 15px;
-		}
-
-		.card-body>div {
-			margin-bottom: 10px;
-			line-height: 1.5;
-		}
-
-		.card-body>div:last-child {
-			margin-bottom: 0;
-		}
-
-		.card-body strong {
-			color: #495057;
-		}
-	</style>
+	<link rel="stylesheet" href="./css/common.css">
 	<?php include 'header.php'; ?>
 </head>
 
@@ -89,7 +30,9 @@
 					<option value="제니스">제니스</option>
 				</select>
 			</div>
-			<button type="button" class="btn btn-primary" onclick="submitCharacterForm()">조회</button>
+			<div class="button-container">
+				<button type="button" class="btn btn-primary mt-2" onclick="submitCharacterForm()">조회</button>
+			</div>
 		</form>
 		<div id="result" class="result-container mt-3" style="display: block;"></div>
 	</div>
