@@ -66,6 +66,7 @@
 			color: #495057;
 		}
 	</style>
+	<?php include 'footer.php'; ?>
 </head>
 
 <body>
