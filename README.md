@@ -26,6 +26,8 @@ NEXON API를 활용하여 유저 정보를 조회할 수 있는 Web Application
 
 </br>
 
-[API](https://openapi.nexon.com/ko/game/maplestorym/)
+## 🚀 Links
+
+[RSS](https://www.newswire.co.kr/?md=A31)
 
 [Application Link](https://maplem.joonoo.kr/)
